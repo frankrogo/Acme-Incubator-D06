@@ -39,10 +39,6 @@
        drop 
        foreign key `FKrkmyfaktfktoo2v26a9qu4ebb`;
 
-    alter table `consumer` 
-       drop 
-       foreign key FK_6cyha9f1wpj0dpbxrrjddrqed;
-
     alter table `entrepreneur` 
        drop 
        foreign key FK_r6tqltqvrlh1cyy8rsj5pev1q;
@@ -79,10 +75,6 @@
        drop 
        foreign key `FKh1s115o7s58c61tedfgudh5my`;
 
-    alter table `provider` 
-       drop 
-       foreign key FK_b1gwnjqm6ggy9yuiqm0o4rlmd;
-
     drop table if exists `accounting_record`;
 
     drop table if exists `activity`;
@@ -103,8 +95,6 @@
 
     drop table if exists `configuration`;
 
-    drop table if exists `consumer`;
-
     drop table if exists `entrepreneur`;
 
     drop table if exists `forum`;
@@ -122,8 +112,6 @@
     drop table if exists `notice`;
 
     drop table if exists `overture`;
-
-    drop table if exists `provider`;
 
     drop table if exists `technology_record`;
 

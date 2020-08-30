@@ -46,6 +46,9 @@ public class EntrepreneurActivityShowService implements AbstractShowService<Entr
 		request.unbind(entity, model, "title", "creationMoment", "deadline", "budget");
 		model.setAttribute("investmentRoundId", entity.getInvestmentRound().getId());
 		model.setAttribute("finalMode", entity.getInvestmentRound().isFinalMode());
+		Integer numberOfActivities = this.repository.findManyByInvestmentRoundId(entity.getInvestmentRound().getId()).size();
+		model.setAttribute("numberOfActivities", numberOfActivities);
+		model.setAttribute("previousBudget", entity.getBudget().getAmount());
 	}
 
 	@Override

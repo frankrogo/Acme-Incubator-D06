@@ -1,14 +1,3 @@
-/*
- * AuthenticatedProviderCreateService.java
- *
- * Copyright (c) 2019 Rafael Corchuelo.
- *
- * In keeping with the traditional purpose of furthering education and research, it is
- * the policy of the copyright owner to permit non-commercial use and redistribution of
- * this software. It has been tested carefully, but it is not guaranteed for any particular
- * purposes. The copyright owner does not offer any warranties or representations, nor do
- * they accept any liabilities with respect to them.
- */
 
 package acme.features.authenticated.entrepreneur;
 
@@ -35,10 +24,10 @@ public class AuthenticatedEntrepreneurCreateService implements AbstractCreateSer
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	private AuthenticatedEntrepreneurRepository repository;
-	
+	private AuthenticatedEntrepreneurRepository		repository;
+
 	@Autowired
-	private AdministratorConfigurationRepository configurationRepository;
+	private AdministratorConfigurationRepository	configurationRepository;
 
 
 	@Override
@@ -46,7 +35,7 @@ public class AuthenticatedEntrepreneurCreateService implements AbstractCreateSer
 		assert request != null;
 		Entrepreneur entrepreneur;
 		entrepreneur = this.repository.findOneEntrepreneurByUserAccountId(request.getPrincipal().getAccountId());
-		return entrepreneur==null ;
+		return entrepreneur == null;
 	}
 
 	@Override
@@ -64,10 +53,10 @@ public class AuthenticatedEntrepreneurCreateService implements AbstractCreateSer
 		assert entity != null;
 		assert model != null;
 
-		request.unbind(entity, model, "startup", "sector", "qualifications","skills");
+		request.unbind(entity, model, "startup", "sector", "qualifications", "skills");
 		Configuration config = this.configurationRepository.findOneConfiguration();
 		String paramConfig = config.getActivitySectors();
-		String[] params= paramConfig.split(",");
+		String[] params = paramConfig.split(",");
 		model.setAttribute("params", params);
 	}
 
@@ -97,7 +86,7 @@ public class AuthenticatedEntrepreneurCreateService implements AbstractCreateSer
 		assert errors != null;
 		Configuration config = this.configurationRepository.findOneConfiguration();
 		String paramConfig = config.getActivitySectors();
-		String[] params= paramConfig.split(",");
+		String[] params = paramConfig.split(",");
 		request.getModel().setAttribute("params", params);
 	}
 

@@ -1,14 +1,3 @@
-/*
- * AuthenticatedProviderCreateService.java
- *
- * Copyright (c) 2019 Rafael Corchuelo.
- *
- * In keeping with the traditional purpose of furthering education and research, it is
- * the policy of the copyright owner to permit non-commercial use and redistribution of
- * this software. It has been tested carefully, but it is not guaranteed for any particular
- * purposes. The copyright owner does not offer any warranties or representations, nor do
- * they accept any liabilities with respect to them.
- */
 
 package acme.features.authenticated.investor;
 
@@ -16,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import acme.entities.configurations.Configuration;
-import acme.entities.roles.Entrepreneur;
 import acme.entities.roles.Investor;
 import acme.features.administrator.configuration.AdministratorConfigurationRepository;
 import acme.framework.components.Errors;
@@ -36,9 +24,9 @@ public class AuthenticatedInvestorCreateService implements AbstractCreateService
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	private AuthenticatedInvestorRepository repository;
+	private AuthenticatedInvestorRepository			repository;
 	@Autowired
-	private AdministratorConfigurationRepository configurationRepository;
+	private AdministratorConfigurationRepository	configurationRepository;
 
 
 	@Override
@@ -46,7 +34,7 @@ public class AuthenticatedInvestorCreateService implements AbstractCreateService
 		assert request != null;
 		Investor investor;
 		investor = this.repository.findOneInvestorByUserAccountId(request.getPrincipal().getAccountId());
-		return investor==null ;
+		return investor == null;
 	}
 
 	@Override
@@ -67,7 +55,7 @@ public class AuthenticatedInvestorCreateService implements AbstractCreateService
 		request.unbind(entity, model, "firm", "sector", "profile");
 		Configuration config = this.configurationRepository.findOneConfiguration();
 		String paramConfig = config.getActivitySectors();
-		String[] params= paramConfig.split(",");
+		String[] params = paramConfig.split(",");
 		model.setAttribute("params", params);
 	}
 
@@ -97,7 +85,7 @@ public class AuthenticatedInvestorCreateService implements AbstractCreateService
 		assert errors != null;
 		Configuration config = this.configurationRepository.findOneConfiguration();
 		String paramConfig = config.getActivitySectors();
-		String[] params= paramConfig.split(",");
+		String[] params = paramConfig.split(",");
 		request.getModel().setAttribute("params", params);
 	}
 

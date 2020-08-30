@@ -26,8 +26,8 @@ entrepreneur.investment-round.form.button.delete = Delete
 
 Entrepreneur.InvestmentRound.error.titleActivity.notblank = Cannot be blank
 Entrepreneur.InvestmentRound.error.deadLineActivity.notnull = Cannot be null
-entrepreneur.investmentRound.error.deadlineActivity.future = Activity's deadline must be after the actual date and time
-entrepreneur.investmentRound.error.deadlineActivity.format = Wrong date and time format
+entrepreneur.InvestmentRound.error.deadlineActivity.future = Activity's deadline must be after the actual date and time
+entrepreneur.InvestmentRound.error.deadlineActivity.format = Wrong date and time format
 Entrepreneur.InvestmentRound.error.deadLineActivity.notblank = Cannot be empty
 Entrepreneur.InvestmentRound.error.budgetActivity.notblank = Cannot be blank
 Entrepreneur.InvestmentRound.error.budgetActivity.notvalid = Not a valid format 

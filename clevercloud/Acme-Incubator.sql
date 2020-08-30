@@ -97,34 +97,6 @@ INSERT INTO `authenticated` VALUES (5,0,3);
 UNLOCK TABLES;
 
 --
--- Table structure for table `consumer`
---
-
-DROP TABLE IF EXISTS `consumer`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `consumer` (
-  `id` int(11) NOT NULL,
-  `version` int(11) NOT NULL,
-  `user_account_id` int(11) DEFAULT NULL,
-  `company` varchar(255) DEFAULT NULL,
-  `sector` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_6cyha9f1wpj0dpbxrrjddrqed` (`user_account_id`),
-  CONSTRAINT `FK_6cyha9f1wpj0dpbxrrjddrqed` FOREIGN KEY (`user_account_id`) REFERENCES `user_account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `consumer`
---
-
-LOCK TABLES `consumer` WRITE;
-/*!40000 ALTER TABLE `consumer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `consumer` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `hibernate_sequence`
 --
 
@@ -170,34 +142,6 @@ CREATE TABLE `perea_bulletin` (
 LOCK TABLES `perea_bulletin` WRITE;
 /*!40000 ALTER TABLE `perea_bulletin` DISABLE KEYS */;
 /*!40000 ALTER TABLE `perea_bulletin` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `provider`
---
-
-DROP TABLE IF EXISTS `provider`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `provider` (
-  `id` int(11) NOT NULL,
-  `version` int(11) NOT NULL,
-  `user_account_id` int(11) DEFAULT NULL,
-  `company` varchar(255) DEFAULT NULL,
-  `sector` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_b1gwnjqm6ggy9yuiqm0o4rlmd` (`user_account_id`),
-  CONSTRAINT `FK_b1gwnjqm6ggy9yuiqm0o4rlmd` FOREIGN KEY (`user_account_id`) REFERENCES `user_account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `provider`
---
-
-LOCK TABLES `provider` WRITE;
-/*!40000 ALTER TABLE `provider` DISABLE KEYS */;
-/*!40000 ALTER TABLE `provider` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

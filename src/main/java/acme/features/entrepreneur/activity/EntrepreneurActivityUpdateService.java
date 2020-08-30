@@ -18,10 +18,10 @@ import acme.framework.components.Errors;
 import acme.framework.components.Model;
 import acme.framework.components.Request;
 import acme.framework.entities.Principal;
-import acme.framework.services.AbstractCreateService;
+import acme.framework.services.AbstractUpdateService;
 
 @Service
-public class EntrepreneurActivityCreateService implements AbstractCreateService<Entrepreneur, Activity> {
+public class EntrepreneurActivityUpdateService implements AbstractUpdateService<Entrepreneur, Activity> {
 
 	@Autowired
 	EntrepreneurActivityRepository repository;
@@ -46,7 +46,8 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 		assert request != null;
 		assert entity != null;
 		assert errors != null;
-		request.bind(entity, errors, "investmentRoundId");
+
+		request.bind(entity, errors);
 	}
 
 	@Override
@@ -54,18 +55,21 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 		assert request != null;
 		assert entity != null;
 		assert model != null;
-		request.unbind(entity, model, "title", "deadline", "budget");
-		model.setAttribute("investmentRoundId", request.getModel().getInteger("investmentRoundId"));
+
+		request.unbind(entity, model, "title", "deadline", "budget", "creationMoment");
+		model.setAttribute("finalmode", entity.getInvestmentRound().isFinalMode());
+		model.setAttribute("previousBudget", entity.getBudget().getAmount());
 
 	}
 
 	@Override
-	public Activity instantiate(final Request<Activity> request) {
+	public Activity findOne(final Request<Activity> request) {
 		assert request != null;
-		Activity result = new Activity();
-		result.setCreationMoment(new Date(System.currentTimeMillis() - 1));
-		InvestmentRound investmentRound = this.repository.findInvestmentRoundById(request.getModel().getInteger("investmentRoundId"));
-		result.setInvestmentRound(investmentRound);
+
+		Activity result;
+		int id = request.getModel().getInteger("id");
+		result = this.repository.findOneById(id);
+
 		return result;
 	}
 
@@ -76,13 +80,14 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 		assert errors != null;
 		Collection<Activity> activities = this.repository.findManyByInvestmentRoundId(entity.getInvestmentRound().getId());
 		InvestmentRound ivr = entity.getInvestmentRound();
+		Double previousBudget = request.getModel().getDouble("previousBudget");
 		if (!errors.hasErrors("budget")) {
 			Double actualBudget = entity.getBudget().getAmount();
 			errors.state(request, actualBudget != null, "budget", "entrepreneur.activity.error.budget.null");
 			Double resta = 0.0;
-			boolean res = this.overAmount(activities, ivr, actualBudget); //si false, la activity actual excede el amount
+			boolean res = this.overAmount(activities, ivr, actualBudget, previousBudget); //si false, la activity actual excede el amount
 			if (res == false && !errors.hasErrors("budget")) {//en ese caso
-				resta = this.quantityLeft(activities, ivr, actualBudget);//print cuanto me he pasado
+				resta = this.quantityLeft(activities, ivr, actualBudget, previousBudget);//print cuanto me he pasado
 				if (request.getLocale().getLanguage().equals("es")) {
 					errors.state(request, res, "budget", "El presupuesto de las actividades ha superado la cantidad monetaria de la ronda de inversión por: " + resta + "EUR");
 				}
@@ -109,7 +114,7 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 
 	}
 
-	private boolean overAmount(final Collection<Activity> activities, final InvestmentRound ivr, final Double actualBudget) {
+	private boolean overAmount(final Collection<Activity> activities, final InvestmentRound ivr, final Double actualBudget, final Double previousBudget) {
 		boolean res = true;
 		Double ivrAmount = ivr.getMoneyAmount().getAmount();
 		Double rest = 0.0;
@@ -117,7 +122,7 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 			Double acMoney = a.getBudget().getAmount();
 			rest = acMoney + rest;
 		}
-		if (rest + actualBudget > ivrAmount) {
+		if (rest - previousBudget + actualBudget > ivrAmount) {
 			res = false;
 		} else {
 			return res;
@@ -125,7 +130,7 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 		return res;
 	}
 
-	private Double quantityLeft(final Collection<Activity> activities, final InvestmentRound ivr, final Double actualBudget) {
+	private Double quantityLeft(final Collection<Activity> activities, final InvestmentRound ivr, final Double actualBudget, final Double previousBudget) {
 		Double rest = 0.0;
 		Double resta = 0.0;
 		Double acMoney = 0.0;
@@ -134,16 +139,17 @@ public class EntrepreneurActivityCreateService implements AbstractCreateService<
 			acMoney = acMoney + a.getBudget().getAmount();
 
 		}
-		rest = actualBudget + acMoney;
+		rest = actualBudget - previousBudget + acMoney;
 
 		resta = rest - ivrAmount;
 		return resta;
 	}
 
 	@Override
-	public void create(final Request<Activity> request, final Activity entity) {
+	public void update(final Request<Activity> request, final Activity entity) {
 		assert request != null;
 		assert entity != null;
+
 		this.repository.save(entity);
 
 	}
