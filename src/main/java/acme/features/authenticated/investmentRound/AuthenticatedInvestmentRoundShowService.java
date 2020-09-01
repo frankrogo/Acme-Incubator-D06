@@ -20,10 +20,13 @@ public class AuthenticatedInvestmentRoundShowService implements AbstractShowServ
 
 
 	@Override
-	public boolean authorise(final Request<InvestmentRound> request) {
-		assert request != null;
-		return true;
-	}
+    public boolean authorise(final Request<InvestmentRound> request) {
+        assert request != null;
+        int investmentRoundId = request.getModel().getInteger("id");
+        InvestmentRound investmentRound = this.repository.findOneById(investmentRoundId);
+
+        return investmentRound.isFinalMode();
+    }
 
 	@Override
 	public void unbind(final Request<InvestmentRound> request, final InvestmentRound entity, final Model model) {

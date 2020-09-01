@@ -71,21 +71,32 @@ public class EntrepreneurInvestmentRoundUpdateService implements AbstractUpdateS
 	}
 
 	@Override
-	public void validate(Request<InvestmentRound> request, InvestmentRound entity, Errors errors) {
-		assert request != null;
-		assert entity != null;
-		assert errors != null;
-		int investmentRoundId = request.getModel().getInteger("id");
-		Collection<Activity> activities = this.activityRepository.findManyByInvestmentRoundId(investmentRoundId);
-		errors.state(request, AmountFinalMode(entity.isFinalMode(),entity.getMoneyAmount(), getSumBudgets(activities)) == true, "finalMode",
-				"Entrepreneur.InvestmentRound.error.finalMode.notvalid" );
-		boolean spamCheckOk;
-		Configuration configuration = this.repository.findConfiguration();
-		String spam = request.getModel().getString("title")+ " " + request.getModel().getString("description") ;
-		spamCheckOk = SpamChecker.spamChecker(configuration, spam);
-		errors.state(request, !spamCheckOk, "*", "Entrepreneur.InvestmentRound.error.update.spam");
-		
-	}
+	   public void validate(Request<InvestmentRound> request, InvestmentRound entity, Errors errors) {
+        assert request != null;
+        assert entity != null;
+        assert errors != null;
+        int investmentRoundId = request.getModel().getInteger("id");
+        Collection<Activity> activities = this.activityRepository.findManyByInvestmentRoundId(investmentRoundId);
+        if (!errors.hasErrors("moneyAmount")) {
+            errors.state(request, AmountFinalMode(entity.isFinalMode(),entity.getMoneyAmount(), getSumBudgets(activities)) == true, "finalMode","Entrepreneur.InvestmentRound.error.finalMode.notvalid" );
+            errors.state(request, AmountValidate(entity.getMoneyAmount(), getSumBudgets(activities)) == true, "moneyAmount","Entrepreneur.InvestmentRound.error.moneyAmount.notvalid" );
+        }boolean spamCheckOk;
+        Configuration configuration = this.repository.findConfiguration();
+        String spam = request.getModel().getString("title")+ " " + request.getModel().getString("description") ;
+        spamCheckOk = SpamChecker.spamChecker(configuration, spam);
+        errors.state(request, !spamCheckOk, "*", "Entrepreneur.InvestmentRound.error.update.spam");
+
+    }
+    private boolean AmountValidate(Money moneyAmount, Double sumBudgets) {
+        boolean res= false;
+        if(moneyAmount.getAmount()!=null && moneyAmount.getCurrency()!=null) {
+            if(moneyAmount.getAmount()>=(sumBudgets)){
+                res= true;
+            }
+
+        }
+        return res;
+    }
 
 	private Double getSumBudgets(Collection<Activity> activities) {
 		Double suma = 0.0;
