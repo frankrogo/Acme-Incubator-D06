@@ -11,12 +11,14 @@
 
 authenticated.accounting-record.investment-round-ticker = Ticker de la ronda de inversión
 
-authenticated.audit-record.list.label.title = Título
-authenticated.audit-record.list.label.status = Estado
-authenticated.audit-record.list.label.creationMoment = Fecha de creación
+authenticated.accounting-record.list.label.title = Título
+authenticated.accounting-record.list.label.status = Estado
+authenticated.accounting-record.list.label.creationMoment = Fecha de creación
+authenticated.accounting-record.list.label.bookkeeper = Contable
 
-authenticated.audit-record.form.label.title = Título:
-authenticated.audit-record.form.label.status = Estado:
-authenticated.audit-record.form.label.creationMoment = Fecha de creación:
-authenticated.audit-record.form.label.body = Cuerpo:
-authenticated.audit-record.form.button.return = Volver
+authenticated.accounting-record.form.label.bookkeeper = Contable:
+authenticated.accounting-record.form.label.title = Título:
+authenticated.accounting-record.form.label.status = Estado:
+authenticated.accounting-record.form.label.creationMoment = Fecha de creación:
+authenticated.accounting-record.form.label.body = Cuerpo:
+authenticated.accounting-record.form.button.return = Volver
